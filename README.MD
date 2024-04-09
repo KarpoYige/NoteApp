@@ -16,14 +16,14 @@ Note taking app was built using following AWS resource
 | POST   /note          | Add/Update node                               |
 
 
-##User signup
+## User signup
 New user are able to sign up using AWS Cognito sign in page
 
 ##Authentication
 User are able to sign in using aws cognito login page
 
 
-##Access token
+## Access token
 Access token are required to make calls to the apigateway endpoints.
 Authentication/Authorization is enforced at the apigateway endpoints using OAuth2 with Grant type flow as Authorization code. For testing purpose 
 one can run provided postman collections to  generate access token and test the endpoints. 
@@ -48,10 +48,10 @@ sam deploy --guided
 
 
 
-##Postman Collection: NoteAPI.postman_collection.json
+## Postman Collection: NoteAPI.postman_collection.json
 
 
-##Architecture Diagram:diagram.png
+## Architecture Diagram:diagram.png
 ![app](diagram.png)
 
 
