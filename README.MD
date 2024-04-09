@@ -6,7 +6,7 @@ Note taking app was built using following AWS resource
 4. DynamoDB
 
 
-## API Gateway endPoints
+## API Gateway EndPoints
 
 | Operation on endPoint | Description                                   |
 |-----------------------|-----------------------------------------------|
