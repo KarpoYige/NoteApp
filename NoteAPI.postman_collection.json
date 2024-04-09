@@ -1,0 +1,178 @@
+{
+	"info": {
+		"_postman_id": "ed5d3c06-44f9-4311-8443-fa6020a572bf",
+		"name": "NoteAPI",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "34102270"
+	},
+	"item": [
+		{
+			"name": "SaveNote",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "{{auth}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n   \r\n    \"title\": \"11th  Day At School\",\r\n    \"body\": \"It was a great day at school. Made some friends and learned about science\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{url}}/prod/note",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"prod",
+						"note"
+					],
+					"query": [
+						{
+							"key": "auth-token",
+							"value": "eyJraWQiOiJ3WTdMZmNxSFVrTGRCT2NueUlzRThlaU16RkdmQTd1bnFDb0dOaFlzbG9vPSIsImFsZyI6IlJTMjU2In0.eyJzdWIiOiIxODYxODM1MC0wMGQxLTcwYWQtNmQ2Yy1jMDgyZjJmMDQ4MzIiLCJpc3MiOiJodHRwczpcL1wvY29nbml0by1pZHAudXMtd2VzdC0yLmFtYXpvbmF3cy5jb21cL3VzLXdlc3QtMl9uUlBVUWtHR2giLCJ2ZXJzaW9uIjoyLCJjbGllbnRfaWQiOiIzdjNxazJkZW1qZ2g1OWtyMGViYmV0bmI3cSIsImV2ZW50X2lkIjoiNTFhNGRlOTgtM2JjZi00M2M0LWE0OWUtZGU2M2M3ZTYyMDNlIiwidG9rZW5fdXNlIjoiYWNjZXNzIiwic2NvcGUiOiJvcGVuaWQgcHJvZmlsZSBlbWFpbCIsImF1dGhfdGltZSI6MTcxMjY3MjYzMCwiZXhwIjoxNzEyNjc2MjMwLCJpYXQiOjE3MTI2NzI2MzAsImp0aSI6IjIwNDBlNzk5LTU0MTItNGQ1Ny04ZDM4LWVmYWI3NmViMTRhZSIsInVzZXJuYW1lIjoiMTg2MTgzNTAtMDBkMS03MGFkLTZkNmMtYzA4MmYyZjA0ODMyIn0.EBRSWJU6b6c_XDHgJiuvHG5OOUXV8LjWsurNA2Z9lrxVuSs1kQT4WtFbydnI0908GiZV8L3GcZS5sNZ7eBS2R7hnytaSjFb9jK9kpfflNdIFANpYw-6ufkqPzXaaO_7oEUCADD466H-t3BosT-33btAHTPb-FLMW_0niaMtVASmmP5BERtcY9jbXyjdzMs05vZV1vo5zIuOWJ8d9FNNFGtkNo0dTd6QRn0GcwWxd8gOB3zFRUn8ZmnkfZkdwimWkQw6X1J1VzoNG0M8XaOCm2zia9TcZ0ZNfRwg9lfdUFzls14uDucoXsBe9xRRJVkHsLcTqigUfR60A_cghfBwZRA",
+							"disabled": true
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GetAllNotes",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "{{auth}}",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "{{url}}/prod/note",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"prod",
+						"note"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GetNoteById",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "{{auth}}",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "{{url}}/prod/note/94609eca-03f7-4203-9633-8b1832cb1621",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"prod",
+						"note",
+						"94609eca-03f7-4203-9633-8b1832cb1621"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "DeleteNoteById",
+			"request": {
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "{{auth}}",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "{{url}}/prod/note/94609eca-03f7-4203-9633-8b1832cb1621",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"prod",
+						"note",
+						"94609eca-03f7-4203-9633-8b1832cb1621"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GET ACCESS TOKEN",
+			"request": {
+				"auth": {
+					"type": "oauth2",
+					"oauth2": [
+						{
+							"key": "clientSecret",
+							"value": "d2p6gh5fd33qoaat7kcthdosr724atmj8ivpd8gsju40i636ecl",
+							"type": "string"
+						},
+						{
+							"key": "clientId",
+							"value": "2n16n8n7qefna4d63vul8ldne3",
+							"type": "string"
+						},
+						{
+							"key": "tokenName",
+							"value": "tr",
+							"type": "string"
+						},
+						{
+							"key": "addTokenTo",
+							"value": "header",
+							"type": "string"
+						},
+						{
+							"key": "accessTokenUrl",
+							"value": "https://note-339712700280.auth.us-west-2.amazoncognito.com/oauth2/token",
+							"type": "string"
+						},
+						{
+							"key": "authUrl",
+							"value": "https://note-339712700280.auth.us-west-2.amazoncognito.com/oauth2/authorize",
+							"type": "string"
+						},
+						{
+							"key": "grant_type",
+							"value": "authorization_code",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "GET ACCESS TOKEN",
+					"host": [
+						"GET ACCESS TOKEN"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

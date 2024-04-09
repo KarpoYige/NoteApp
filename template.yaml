@@ -1,0 +1,170 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: An AWS Serverless Application Model template describing your function.
+Parameters:
+  AppName:
+    Type: String
+    Description: Name of the application
+    Default: 'note'
+  Stage:
+    Type: String
+    Description: Stage to deploy
+    Default: 'prod'
+  CallBackUrl:
+    Type: String
+    Description: Callback for auth
+    Default: 'https://oauth.pstmn.io/v1/browser-callback'
+Resources:
+  ApiGatewayApi:
+    Type: AWS::Serverless::Api
+    Properties:
+      StageName: !Sub ${Stage}
+      Auth:
+        DefaultAuthorizer: MyCognitoAuthorizer
+        Authorizers:
+          MyCognitoAuthorizer:
+            UserPoolArn: !GetAtt MyCognitoUserPool.Arn
+            AuthorizationScopes:
+            - email
+      Cors: "'*'"
+  MyCognitoUserPool:
+    Type: AWS::Cognito::UserPool
+    Properties:
+      UserPoolName: note-user-pool
+      VerificationMessageTemplate:
+        DefaultEmailOption: CONFIRM_WITH_LINK
+      AutoVerifiedAttributes:
+        - email
+      Policies:
+        PasswordPolicy:
+          MinimumLength: 8
+      UsernameAttributes:
+        - email
+      Schema:
+        - AttributeDataType: String
+          Name: email
+          Required: false
+  
+  MyCognitoUserPoolClient:
+    Type: AWS::Cognito::UserPoolClient
+    Properties:
+      UserPoolId: !Ref MyCognitoUserPool
+      ClientName: note-user-pool-client-name
+      GenerateSecret: true
+      SupportedIdentityProviders:
+        - COGNITO
+      AllowedOAuthFlowsUserPoolClient: true
+      CallbackURLs:
+        - !Sub ${CallBackUrl}
+      LogoutURLs:
+        - !Sub 'http://localhost:8080/logout'
+      AllowedOAuthFlows:
+      - code
+      - implicit
+      AllowedOAuthScopes:
+      - email
+      - openid
+      - profile
+  UserPoolDomain:
+    Type: AWS::Cognito::UserPoolDomain
+    Properties: 
+      Domain: !Sub ${AppName}-${AWS::AccountId}
+      UserPoolId: !Ref MyCognitoUserPool
+  NoteTable:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      TableName: note
+      AttributeDefinitions:
+        - AttributeName: userId
+          AttributeType: S
+        - AttributeName: noteId
+          AttributeType: S
+      KeySchema:
+        - AttributeName: userId
+          KeyType: HASH
+        - AttributeName: noteId
+          KeyType: RANGE
+      ProvisionedThroughput:
+        ReadCapacityUnits: 1
+        WriteCapacityUnits: 1
+  NoteApp:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: .
+      Description: ''
+      MemorySize: 512
+      Timeout: 15
+      Handler: com.norbu.note.NoteLambda::handleRequest
+      Runtime: java17
+      Architectures:
+        - x86_64
+      EphemeralStorage:
+        Size: 512
+      EventInvokeConfig:
+        MaximumEventAgeInSeconds: 21600
+        MaximumRetryAttempts: 2
+      PackageType: Zip
+      Environment:
+        Variables:
+          VAR_AWS_REGION: !Sub ${AWS::Region}
+      Policies:
+        - DynamoDBCrudPolicy:
+            TableName: !Ref NoteTable
+        - Version: '2012-10-17'
+          Statement:
+            - Effect: Allow
+              Action:
+                - dynamodb:DescribeTable
+                - dynamodb:GetItem
+                - dynamodb:PutItem
+                - dynamodb:UpdateItem
+                - dynamodb:DeleteItem
+                - dynamodb:Query
+                - dynamodb:Scan
+              Resource: !GetAtt NoteTable.Arn
+      SnapStart:
+        ApplyOn: None
+      Events:
+        Api1:
+          Type: Api
+          Properties:
+            Path: /note
+            Method: POST
+            RestApiId: !Ref ApiGatewayApi
+        Api2:
+          Type: Api
+          Properties:
+            Path: /note/{noteId}
+            Method: GET
+            RestApiId: !Ref ApiGatewayApi
+        Api3:
+          Type: Api
+          Properties:
+            Path: /note/{noteId}
+            Method: DELETE
+            RestApiId: !Ref ApiGatewayApi
+        Api4:
+          Type: Api
+          Properties:
+            Path: /note
+            Method: GET
+            RestApiId: !Ref ApiGatewayApi
+        Api5:
+          Type: Api
+          Properties:
+            Path: /note
+            Method: DELETE
+            RestApiId: !Ref ApiGatewayApi
+      RuntimeManagementConfig:
+        UpdateRuntimeOn: Auto
+
+Outputs:
+  APIGatewayEndpoint:
+    Description: API Gateway endpoint URL for Prod stage
+    Value: !Sub "https://${ApiGatewayApi}.execute-api.${AWS::Region}.amazonaws.com/${Stage}/"
+  AuthUrl:
+    Description: "URL used for authentication"
+    Value: !Sub https://${UserPoolDomain}.auth.${AWS::Region}.amazoncognito.com
+  DynamoDBTableName:
+    Value: !Ref NoteTable
+    Description: DynamoDB Table Name

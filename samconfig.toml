@@ -1,0 +1,10 @@
+version = 0.1
+[default.deploy.parameters]
+stack_name = "note-app"
+resolve_s3 = true
+s3_prefix = "note-app"
+region = "us-west-2"
+confirm_changeset = true
+capabilities = "CAPABILITY_IAM"
+parameter_overrides = "AppName=\"note\" Stage=\"prod\" CallBackUrl=\"https://oauth.pstmn.io/v1/browser-callback\""
+image_repositories = []
