@@ -1,9 +1,9 @@
 ## Introduction
 Note taking app was built using following AWS resource
 1. Cognito
-API Gateway
-Lambda
-DynamoDB
+2. API Gateway
+3. Lambda
+4. DynamoDB
 
 
 ##API Gateway endPoints
